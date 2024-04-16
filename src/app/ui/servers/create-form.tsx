@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useFormState } from "react-dom";
-import { createServer } from "../../lib/servers/actions";
+import { useFormState } from 'react-dom';
+import { createServer } from '../../lib/servers/actions';
 
 export default function Form() {
   const initialState = { message: null, errors: {} };

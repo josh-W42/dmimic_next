@@ -1,18 +1,23 @@
-"use server";
+'use server';
 
-import { z } from "zod";
-import prisma from "../prisma";
-import { nanoid } from "nanoid";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { z } from 'zod';
+import prisma from '../prisma';
+import { nanoid } from 'nanoid';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 const FormSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z
+    .string({
+      required_error: 'Server must have a name',
+    })
+    .trim()
+    .min(3, { message: 'Server names Must at least be 3 characters long' }),
   description: z.string(),
   isPublic: z.boolean({
-    required_error: "Please state if the server is Public or Private.",
-    invalid_type_error: "isPublic must be a boolean",
+    required_error: 'Please state if the server is Public or Private.',
+    invalid_type_error: 'isPublic must be a boolean',
   }),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -35,17 +40,16 @@ export type State = {
 
 export async function createServer(initialState: State, formData: FormData) {
   // Validation
-  // console.log(formData);
   const validatedFields = CreateServer.safeParse({
-    name: formData.get("name"),
-    description: formData.get("description"),
-    isPublic: formData.get("isPublic"),
+    name: formData.get('name'),
+    description: formData.get('description'),
+    isPublic: formData.get('isPublic') ? true : false,
   });
 
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Server",
+      message: 'Missing Fields. Failed to Create Server',
     };
   }
 
@@ -64,11 +68,11 @@ export async function createServer(initialState: State, formData: FormData) {
       },
     });
 
-    revalidatePath("/servers");
-    redirect("/servers");
+    revalidatePath('/servers');
+    redirect('/servers');
   } catch (error) {
     return {
-      message: "Database Error: Failed to Create Server",
+      message: 'Database Error: Failed to Create Server',
     };
   }
 }
