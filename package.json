@@ -11,10 +11,10 @@
   "dependencies": {
     "@prisma/client": "^5.12.1",
     "@vercel/analytics": "^1.2.2",
-    "@vercel/postgres": "^0.8.0",
+    "@vercel/postgres": "^0.10.0",
     "@vercel/speed-insights": "^1.0.10",
     "nanoid": "^5.0.7",
-    "next": "14.2.0",
+    "next": "14.2.12",
     "react": "^18",
     "react-dom": "^18",
     "zod": "^3.22.4"
